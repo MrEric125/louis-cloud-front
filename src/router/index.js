@@ -83,45 +83,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: '文档', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: '向导', icon: 'guide', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: '轮廓', icon: 'user', noCache: true }
-      }
-    ]
-  }
+
 ]
 
 /**
@@ -136,53 +98,211 @@ export const asyncRoutes = [
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
-      title: '权限',
+      title: '权限设置',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
       {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
+        path: 'user',
+        component: () => import('@/views/permission/user'),
+        name: 'user',
         meta: {
-          title: '权限页面',
+          title: '用户管理',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
+        path: 'menu',
+        component: () => import('@/views/permission/menu'),
+        name: '菜单管理',
         meta: {
-          title: 'Directive Permission'
+          title: '菜单管理'
           // if do not set roles, means: this page does not require permission
         }
       },
       {
         path: 'role',
         component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
+        name: '角色管理',
         meta: {
-          title: '角色',
+          title: '角色管理',
+          roles: ['admin']
+        }
+      },
+      {
+        path: 'permission',
+        component: () => import('@/views/permission/permission'),
+        name: '权限管理',
+        meta: {
+          title: '权限管理',
           roles: ['admin']
         }
       }
     ]
   },
-
   {
-    path: '/icon',
+    path: '/product',
     component: Layout,
-    children: [
+    redirect: '/product/list',
+    alwaysShow: true, // will always show the root menu
+    name: 'product',
+    meta: {
+      title: '商品管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children:[
       {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: '图标', icon: 'icon', noCache: true }
+        path:'/list',
+        component:()=>import('@/views/product/list'),
+        name:'商品列表',
+        meta:{
+          title: '商品列表', noCache: true
+        }
+      },
+      {
+        path:'/insert',
+        component:()=>import('@/views/product/insert'),
+        name:'添加商品',
+        meta:{
+          title: '添加商品', noCache: true
+        }
+      },
+      {
+        path:'/category',
+        component:()=>import('@/views/product/category'),
+        name:'商品分类',
+        meta:{
+          title: '商品分类', noCache: true
+        }
+      },
+      {
+        path:'/Brand',
+        component:()=>import('@/views/product/brand'),
+        name:'品牌管理',
+        meta:{
+          title: '品牌管理', noCache: true
+        }
       }
     ]
   },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/list',
+    alwaysShow: true, // will always show the root menu
+    name: 'order',
+    meta: {
+      title: '订单管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children:[
+      {
+        path:'/list',
+        component:()=>import('@/views/order/list'),
+        name:'订单列表',
+        meta:{
+          title: '订单列表', noCache: true
+        }
+      },
+      {
+        path:'/setting',
+        component:()=>import('@/views/order/setting'),
+        name:'订单设置',
+        meta:{
+          title: '订单设置', noCache: true
+        }
+      },
+      {
+        path:'/backProcess',
+        component:()=>import('@/views/order/backProcess'),
+        name:'退货申请处理',
+        meta:{
+          title: '退货申请处理', noCache: true
+        }
+      },
+      {
+        path:'/backReasonSetting',
+        component:()=>import('@/views/order/backReasonSetting'),
+        name:'退货原因设置',
+        meta:{
+          title: '退货原因设置', noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/market',
+    component: Layout,
+    redirect: '/market/spikeList',
+    alwaysShow: true, // will always show the root menu
+    name: 'market',
+    meta: {
+      title: '营销管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children:[
+      {
+        path:'/list',
+        component:()=>import('@/views/market/spikeList'),
+        name:'秒杀活动列表',
+        meta:{
+          title: '秒杀活动列表', noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/monitor',
+    component: Layout,
+    // redirect: '/monitor/list',
+    alwaysShow: true, // will always show the root menu
+    name: 'monitor',
+    meta: {
+      title: '运营监控',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children:[
+      {
+        path:'/database',
+        component:()=>import('@/views/monitor/database'),
+        name:'数据库监控',
+        meta:{
+          title: '数据库监控', noCache: true
+        }
+      },
+      {
+        path:'/interface',
+        component:()=>import('@/views/monitor/interface'),
+        name:'接口调用监控',
+        meta:{
+          title: '接口调用监控', noCache: true
+        }
+      },
+      {
+        path:'/loginMessage',
+        component:()=>import('@/views/monitor/loginMessage'),
+        name:'登录信息信息监控',
+        meta:{
+          title: '登录信息信息监控', noCache: true
+        }
+      },
+      {
+        path:'/log',
+        component:()=>import('@/views/monitor/log'),
+        name:'日志监控',
+        meta:{
+          title: '日志监控', noCache: true
+        }
+      }
+    ]
+  },
+
+
 
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
@@ -190,50 +310,9 @@ export const asyncRoutes = [
   nestedRouter,
   tableRouter,
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'Example',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: '文章创建', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: '文章列表', icon: 'list' }
-      }
-    ]
-  },
 
-  {
-    path: '/tab',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/tab/index'),
-        name: 'Tab',
-        meta: { title: 'Tab', icon: 'tab' }
-      }
-    ]
-  },
+
+
 
   {
     path: '/error',
