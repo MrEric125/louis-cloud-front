@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'louis-cloud-front',
+  title: 'Vue Element Admin',
 
   /**
    * @type {boolean} true | false
@@ -32,4 +32,4 @@ module.exports = {
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
   errorLog: 'production'
-};
+}

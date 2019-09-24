@@ -40,22 +40,22 @@
 <script>
 import Todo from './Todo.vue'
 
-const STORAGE_KEY = 'todos';
+const STORAGE_KEY = 'todos'
 const filters = {
   all: todos => todos,
   active: todos => todos.filter(todo => !todo.done),
   completed: todos => todos.filter(todo => todo.done)
-};
+}
 const defalutList = [
-  {text: 'star this repository', done: false},
-  {text: 'fork this repository', done: false},
-  {text: 'follow author', done: false},
-  {text: 'vue-element-admin', done: true},
-  {text: 'vue', done: true},
-  {text: 'element-ui', done: true},
-  {text: 'axios', done: true},
-  {text: 'webpack', done: true}
-];
+  { text: 'star this repository', done: false },
+  { text: 'fork this repository', done: false },
+  { text: 'follow author', done: false },
+  { text: 'vue-element-admin', done: true },
+  { text: 'vue', done: true },
+  { text: 'element-ui', done: true },
+  { text: 'axios', done: true },
+  { text: 'webpack', done: true }
+]
 export default {
   components: { Todo },
   filters: {
@@ -86,35 +86,35 @@ export default {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos))
     },
     addTodo(e) {
-      const text = e.target.value;
+      const text = e.target.value
       if (text.trim()) {
         this.todos.push({
           text,
           done: false
-        });
+        })
         this.setLocalStorage()
       }
       e.target.value = ''
     },
     toggleTodo(val) {
-      val.done = !val.done;
+      val.done = !val.done
       this.setLocalStorage()
     },
     deleteTodo(todo) {
-      this.todos.splice(this.todos.indexOf(todo), 1);
+      this.todos.splice(this.todos.indexOf(todo), 1)
       this.setLocalStorage()
     },
     editTodo({ todo, value }) {
-      todo.text = value;
+      todo.text = value
       this.setLocalStorage()
     },
     clearCompleted() {
-      this.todos = this.todos.filter(todo => !todo.done);
+      this.todos = this.todos.filter(todo => !todo.done)
       this.setLocalStorage()
     },
     toggleAll({ done }) {
       this.todos.forEach(todo => {
-        todo.done = done;
+        todo.done = done
         this.setLocalStorage()
       })
     }

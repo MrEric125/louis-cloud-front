@@ -73,15 +73,15 @@ const lineChartData = {
 export default {
   name: 'DashboardAdmin',
   components: {
-    // GithubCorner,
-    // PanelGroup,
-    // LineChart,
-    // RaddarChart,
-    // PieChart,
-    BarChart
-    // TransactionTable,
-    // TodoList,
-    // BoxCard
+    GithubCorner,
+    PanelGroup,
+    LineChart,
+    RaddarChart,
+    PieChart,
+    BarChart,
+    TransactionTable,
+    TodoList,
+    BoxCard
   },
   data() {
     return {
@@ -90,7 +90,6 @@ export default {
   },
   methods: {
     handleSetLineChartData(type) {
-      console.log(type);
       this.lineChartData = lineChartData[type]
     }
   }

@@ -58,8 +58,8 @@ export default {
       this.$emit('toggleTodo', todo)
     },
     doneEdit(e) {
-      const value = e.target.value.trim();
-      const {todo} = this;
+      const value = e.target.value.trim()
+      const { todo } = this
       if (!value) {
         this.deleteTodo({
           todo
@@ -68,12 +68,12 @@ export default {
         this.editTodo({
           todo,
           value
-        });
+        })
         this.editing = false
       }
     },
     cancelEdit(e) {
-      e.target.value = this.todo.text;
+      e.target.value = this.todo.text
       this.editing = false
     }
   }

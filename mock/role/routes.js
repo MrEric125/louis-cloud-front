@@ -510,16 +510,16 @@ export const asyncRoutes = [
     ]
   },
 
-  {
-    path: 'external-link',
-    component: 'layout/Layout',
-    children: [
-      {
-        path: 'https://github.com/MrEric125/louis-cloud-front',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
+  // {
+  //   path: 'external-link',
+  //   component: 'layout/Layout',
+  //   children: [
+  //     {
+  //       path: 'https://github.com/MrEric125/louis-cloud-front',
+  //       meta: { title: 'External Link', icon: 'link' }
+  //     }
+  //   ]
+  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

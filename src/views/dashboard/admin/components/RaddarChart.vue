@@ -4,11 +4,10 @@
 
 <script>
 import echarts from 'echarts'
-
-require('echarts/theme/macarons'); // echarts theme
+require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
-const animationDuration = 3000;
+const animationDuration = 3000
 
 export default {
   mixins: [resize],
@@ -40,12 +39,12 @@ export default {
     if (!this.chart) {
       return
     }
-    this.chart.dispose();
+    this.chart.dispose()
     this.chart = null
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons');
+      this.chart = echarts.init(this.$el, 'macarons')
 
       this.chart.setOption({
         tooltip: {
@@ -69,12 +68,12 @@ export default {
             }
           },
           indicator: [
-            {name: 'Sales', max: 10000},
-            {name: 'Administration', max: 20000},
-            {name: 'Information Techology', max: 20000},
-            {name: 'Customer Support', max: 20000},
-            {name: 'Development', max: 20000},
-            {name: 'Marketing', max: 20000}
+            { name: 'Sales', max: 10000 },
+            { name: 'Administration', max: 20000 },
+            { name: 'Information Techology', max: 20000 },
+            { name: 'Customer Support', max: 20000 },
+            { name: 'Development', max: 20000 },
+            { name: 'Marketing', max: 20000 }
           ]
         },
         legend: {
@@ -113,5 +112,5 @@ export default {
       })
     }
   }
-};
+}
 </script>
