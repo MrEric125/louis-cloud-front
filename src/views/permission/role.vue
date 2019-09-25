@@ -148,6 +148,7 @@ export default {
       })
       return data
     },
+    //todo 查询所有的permission,这个permission就是用于查看menus的
     handleAddRole() {
       this.role = Object.assign({}, defaultRole)
       if (this.$refs.tree) {
@@ -183,6 +184,10 @@ export default {
           })
         })
         .catch(err => { console.error(err) })
+    },
+
+    handleSelect(){
+
     },
     generateTree(routes, basePath = '/', checkedKeys) {
       const res = []

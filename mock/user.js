@@ -1,3 +1,6 @@
+import Mock from 'mockjs'
+// import { asyncRoutes, constantRoutes } from './role/routes.js'
+// import { deepClone } from '../src/utils'
 
 const tokens = {
   admin: {
@@ -7,6 +10,7 @@ const tokens = {
     token: 'editor-token'
   }
 }
+// const routes = deepClone([...constantRoutes, ...asyncRoutes])
 
 const users = {
   'admin-token': {
@@ -78,6 +82,64 @@ export default [
       return {
         code: 20000,
         data: 'success'
+      }
+    }
+  },
+  {
+    url: '/routes',
+    type: 'get',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success'
+      }
+    }
+  },
+
+  // mock get all roles form server
+  {
+    url: '/user/search',
+    type: 'get',
+    response: _ => {
+      return {
+        code: 20000,
+        data: users
+      }
+    }
+  },
+
+  // add role
+  {
+    url: '/user/add',
+    type: 'post',
+    response: {
+      code: 20000,
+      data: {
+        key: Mock.mock('@integer(300, 5000)')
+      }
+    }
+  },
+
+  // update role
+  {
+    url: '/user/[A-Za-z0-9]',
+    type: 'put',
+    response: {
+      code: 20000,
+      data: {
+        status: 'success'
+      }
+    }
+  },
+
+  // delete role
+  {
+    url: '/user/[A-Za-z0-9]',
+    type: 'delete',
+    response: {
+      code: 20000,
+      data: {
+        status: 'success'
       }
     }
   }
