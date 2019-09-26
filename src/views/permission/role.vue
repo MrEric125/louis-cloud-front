@@ -1,21 +1,54 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAddRole">New Role</el-button>
+
+
+
+    <div class="filter-container" style="padding-bottom: 40px">
+
+
+      <div style="float:left">
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleAddRole">
+          新建角色
+        </el-button>
+      </div>
+      <div style="float:right;margin-right: 150px">
+        <el-input  placeholder="角色名称" style="width: 300px;" class="filter-item" @keyup.enter.native="handleSelect" />
+
+        <el-button  class=" filter-item" type="primary" icon="el-icon-search" @click="handleSelect">
+          查询
+        </el-button>
+
+        <el-button  class="filter-item" type="primary" icon="el-icon-download" @click="handleSelect">
+          导出
+        </el-button>
+      </div>
+
+    </div>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="Role Key" width="220">
+      <el-table-column min-width="30" align="center" label="中文角色名"  >
         <template slot-scope="scope">
-          {{ scope.row.key }}
+          {{ scope.row.zhName }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Role Name" width="220">
+      <el-table-column min-width="30" align="center" label="英文角色名" >
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.enName }}
         </template>
       </el-table-column>
-      <el-table-column align="header-center" label="Description">
+      <el-table-column min-width="80px" align="center" label="角色描述" >
         <template slot-scope="scope">
           {{ scope.row.description }}
+        </template>
+      </el-table-column>
+      <el-table-column min-width="30" align="center" label="创建时间" >
+        <template slot-scope="scope">
+          {{ scope.row.createTime }}
+        </template>
+      </el-table-column>
+      <el-table-column min-width="30" align="center" label="子角色" >
+        <template slot-scope="scope">
+          {{ scope.row.childRole }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="Operations">
@@ -65,9 +98,11 @@ import { deepClone } from '@/utils'
 import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
 
 const defaultRole = {
-  key: '',
-  name: '',
+  chName: '',
+  enName: '',
   description: '',
+  createTime:'',
+  childRole:'',
   routes: []
 }
 
@@ -100,7 +135,7 @@ export default {
     async getRoutes() {
       const res = await getRoutes()
       this.serviceRoutes = res.data
-      this.routes = this.generateRoutes(res.data)
+      // this.routes = this.generateRoutes(res.data)
     },
     async getRoles() {
       const res = await getRoles()
@@ -226,15 +261,17 @@ export default {
         this.rolesList.push(this.role)
       }
 
-      const { description, key, name } = this.role
+      const { chName, enName,description, createTime,childRole } = this.role
       this.dialogVisible = false
       this.$notify({
         title: 'Success',
         dangerouslyUseHTMLString: true,
         message: `
-            <div>Role Key: ${key}</div>
-            <div>Role Name: ${name}</div>
-            <div>Description: ${description}</div>
+            <div>角色中文名: ${chName}</div>
+            <div>角色英文名: ${enName}</div>
+            <div>角色描述: ${description}</div>
+            <div>创建时间: ${createTime}</div>
+            <div>子角色: ${childRole}</div>
           `,
         type: 'success'
       })
