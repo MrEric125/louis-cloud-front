@@ -108,7 +108,7 @@
       },
 
       // Reshape the routes structure so that it looks the same as the sidebar
-      generateRoutes(routes, basePath = '/') {
+      __generateRoutes(routes, basePath = '/') {
         const res = []
 
         for (let route of routes) {
@@ -136,7 +136,7 @@
         }
         return res
       },
-      generateArr(routes) {
+      __generateArr(routes) {
         let data = []
         routes.forEach(route => {
           data.push(route)
@@ -163,8 +163,8 @@
         this.checkStrictly = true
         this.user = deepClone(scope.row)
         this.$nextTick(() => {
-          const routes = this.generateRoutes(this.user.routes)
-          this.$refs.tree.setCheckedNodes(this.generateArr(routes))
+          const routes = this.__generateRoutes(this.user.routes)
+          this.$refs.tree.setCheckedNodes(this.__generateArr(routes))
           // set checked state of a node not affects its father and child nodes
           this.checkStrictly = false
         })

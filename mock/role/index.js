@@ -6,27 +6,27 @@ const routes = deepClone([...constantRoutes, ...asyncRoutes])
 
 const roles = [
   {
+    id: 1,
     zhName: '管理员',
     enName: 'admin',
     description: 'Super Administrator. Have access to view all pages.',
     createTime: '2019-9-26 23:07:44',
-    childRole: '子角色',
     routes: routes
   },
   {
+    id: 2,
     zhName: '编辑者',
     enName: 'editor',
     description: 'Normal Editor. Can see all pages except permission page',
     createTime: '2019-9-26 23:07:44',
-    childRole: '子角色',
     routes: routes.filter(i => i.path !== '/permission')// just a mock
   },
   {
+    id: 3,
     zhName: '访问者',
     enName: 'visitor',
     description: 'Just a visitor. Can only see the home page and the document page',
     createTime: '2019-9-26 23:07:44',
-    childRole: '子角色',
     routes: [{
       path: '',
       redirect: 'dashboard',
@@ -38,7 +38,32 @@ const roles = [
         }
       ]
     }]
+  },
+  {
+    id: 4,
+    zhName: '分页',
+    enName: 'editor',
+    description: 'Normal Editor. Can see all pages except permission page',
+    createTime: '2019-9-26 23:07:44',
+    routes: routes.filter(i => i.path !== '/permission')// just a mock
+  },
+  {
+    id: 5,
+    zhName: '分页',
+    enName: 'editor',
+    description: 'Normal Editor. Can see all pages except permission page',
+    createTime: '2019-9-26 23:07:44',
+    routes: routes.filter(i => i.path !== '/permission')// just a mock
+  },
+  {
+    id: 6,
+    zhName: '分页',
+    enName: 'editor',
+    description: 'Normal Editor. Can see all pages except permission page',
+    createTime: '2019-9-26 23:07:44',
+    routes: routes.filter(i => i.path !== '/permission')// just a mock
   }
+
 ]
 
 export default [
@@ -61,7 +86,12 @@ export default [
     response: _ => {
       return {
         code: 20000,
-        data: roles
+        data: {
+          list: roles,
+          total: 6,
+          pageSize: 10,
+          pageNum: 1
+        }
       }
     }
   },
