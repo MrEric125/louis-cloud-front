@@ -1,71 +1,24 @@
 import Mock from 'mockjs'
-import { deepClone } from '../../src/utils/index.js'
+import { deepClone ,compare} from '../../src/utils/index.js'
 import { asyncRoutes, constantRoutes } from './routes.js'
 
 const routes = deepClone([...constantRoutes, ...asyncRoutes])
 
-const roles = [
-  {
-    id: 1,
-    zhName: '管理员',
-    enName: 'admin',
-    description: 'Super Administrator. Have access to view all pages.',
-    createTime: '2019-9-26 23:07:44',
-    routes: routes
-  },
-  {
-    id: 2,
-    zhName: '编辑者',
-    enName: 'editor',
-    description: 'Normal Editor. Can see all pages except permission page',
-    createTime: '2019-9-26 23:07:44',
-    routes: routes.filter(i => i.path !== '/permission')// just a mock
-  },
-  {
-    id: 3,
-    zhName: '访问者',
-    enName: 'visitor',
-    description: 'Just a visitor. Can only see the home page and the document page',
-    createTime: '2019-9-26 23:07:44',
-    routes: [{
-      path: '',
-      redirect: 'dashboard',
-      children: [
-        {
-          path: 'dashboard',
-          name: 'Dashboard',
-          meta: { title: 'dashboard', icon: 'dashboard' }
-        }
-      ]
-    }]
-  },
-  {
-    id: 4,
-    zhName: '分页',
-    enName: 'editor',
-    description: 'Normal Editor. Can see all pages except permission page',
-    createTime: '2019-9-26 23:07:44',
-    routes: routes.filter(i => i.path !== '/permission')// just a mock
-  },
-  {
-    id: 5,
-    zhName: '分页',
-    enName: 'editor',
-    description: 'Normal Editor. Can see all pages except permission page',
-    createTime: '2019-9-26 23:07:44',
-    routes: routes.filter(i => i.path !== '/permission')// just a mock
-  },
-  {
-    id: 6,
-    zhName: '分页',
-    enName: 'editor',
-    description: 'Normal Editor. Can see all pages except permission page',
-    createTime: '2019-9-26 23:07:44',
-    routes: routes.filter(i => i.path !== '/permission')// just a mock
-  }
 
-]
+const roles=[]
 
+const count=30
+
+for (let i = 0; i < count; i++) {
+  roles.push(Mock.mock({
+    id:'@increment',
+    createTime:+Mock.Random.date('T'),
+    zhName:'@title(2,3)',
+    enName:'@title(1,2)',
+    description:'@title(5, 10)'
+  }))
+
+}
 export default [
   // mock get all routes form server
   {
@@ -81,16 +34,30 @@ export default [
 
   // mock get all roles form server
   {
-    url: '/roles',
+    url: '/role/list',
     type: 'get',
-    response: _ => {
+    response: config=> {
+      const {enName,page=1,limit=20,sort,sortCondition}=config.query
+
+      let mockList=roles.filter(item=>{
+        return !(enName && item.enName !== enName);
+
+      })
+
+      //根据条件排序
+
+      mockList.sort(compare(sort == null ? 'id' : sort, sortCondition))
+
+      const pageList=mockList.filter((item,index)=>
+        index < limit * page && index >= limit * (page - 1)
+      )
       return {
         code: 20000,
         data: {
-          list: roles,
-          total: 6,
-          pageSize: 10,
-          pageNum: 1
+          list: pageList,
+          total: mockList.length
+          // pageSize: 10,
+          // pageNum: 1
         }
       }
     }
@@ -98,7 +65,7 @@ export default [
 
   // add role
   {
-    url: '/role',
+    url: '/role/add',
     type: 'post',
     response: {
       code: 20000,
@@ -110,24 +77,24 @@ export default [
 
   // update role
   {
-    url: '/role/[A-Za-z0-9]',
+    url: '/role/update',
     type: 'put',
-    response: {
-      code: 20000,
-      data: {
-        status: 'success'
+    response: _=>{
+      return {
+        code: 20000,
+        data:'success'
       }
     }
   },
 
   // delete role
   {
-    url: '/role/[A-Za-z0-9]',
+    url: '/role/delete',
     type: 'delete',
-    response: {
-      code: 20000,
-      data: {
-        status: 'success'
+    response: _=>{
+      return {
+        code: 20000,
+        data:'success'
       }
     }
   }

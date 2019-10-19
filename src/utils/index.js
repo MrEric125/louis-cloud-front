@@ -300,6 +300,31 @@ export function deepClone(source) {
   })
   return targetObj
 }
+// 根据对象属性排序
+// 默认是降序
+ export function compare(prop,condition){
+  return (r1,r2)=>{
+    let v1=r1[prop];
+    let v2=r2[prop];
+    if (v1 < v2) {
+      if('asc'===condition){
+        return -1;
+      }else{
+        return 1
+      }
+    } else if (v1 > v2) {
+      if('asc'===condition){
+        return 1;
+      }else{
+        return -1
+      }
+    } else {
+      return 0;
+    }
+  }
+
+
+}
 
 /**
  * @param {Array} arr
