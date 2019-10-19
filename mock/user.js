@@ -1,4 +1,5 @@
 import Mock from 'mockjs'
+import {compare} from "../src/utils";
 // import { asyncRoutes, constantRoutes } from './role/routes.js'
 // import { deepClone } from '../src/utils'
 
@@ -27,6 +28,23 @@ const users = {
   }
 }
 
+
+const userList=[]
+
+const count=30
+
+for (let i = 0; i < count; i++) {
+  userList.push(Mock.mock({
+    id:'@increment',
+    registryTime:+Mock.Random.date('T'),
+    username:'@title(2,3)',
+    realName:'@title(1,2)',
+    email:'@title(1,2)',
+    phone:'@title(1,2)',
+  }))
+
+}
+
 export default [
   // user login
   {
@@ -47,6 +65,27 @@ export default [
       return {
         code: 20000,
         data: token
+      }
+    }
+  },
+  // user logout
+  {
+    url: '/user/logout',
+    type: 'post',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success'
+      }
+    }
+  },
+  {
+    url: '/routes',
+    type: 'get',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success'
       }
     }
   },
@@ -74,36 +113,34 @@ export default [
     }
   },
 
-  // user logout
-  {
-    url: '/user/logout',
-    type: 'post',
-    response: _ => {
-      return {
-        code: 20000,
-        data: 'success'
-      }
-    }
-  },
-  {
-    url: '/routes',
-    type: 'get',
-    response: _ => {
-      return {
-        code: 20000,
-        data: 'success'
-      }
-    }
-  },
 
-  // mock get all roles form server
+
+  // mock get all users form server
   {
-    url: '/user/search',
+    url: '/user/list',
     type: 'get',
-    response: _ => {
+    response: config => {
+      const {username,page=1,limit=20,sort,sortCondition}=config.query
+
+      let mockList=userList.filter(item=>{
+        return !(username && item.username !== username);
+      })
+
+      //根据条件排序
+
+      mockList.sort(compare(sort == null ? 'id' : sort, sortCondition))
+
+      const pageList=mockList.filter((item,index)=>
+        index < limit * page && index >= limit * (page - 1)
+      )
       return {
         code: 20000,
-        data: users
+        data: {
+          list: pageList,
+          total: mockList.length
+          // pageSize: 10,
+          // pageNum: 1
+        }
       }
     }
   },
@@ -122,24 +159,32 @@ export default [
 
   // update role
   {
-    url: '/user/[A-Za-z0-9]',
+    url: '/user/update',
     type: 'put',
-    response: {
-      code: 20000,
-      data: {
-        status: 'success'
+    response: _=>{
+      return {
+        code: 20000,
+        data:{
+          status: 'success'
+        }
       }
+
     }
   },
 
   // delete role
   {
-    url: '/user/[A-Za-z0-9]',
+    url: '/user/delete',
     type: 'delete',
     response: {
       code: 20000,
-      data: {
-        status: 'success'
+      response: _=>{
+        return {
+          code: 20000,
+          data:{
+            status: 'success'
+          }
+        }
       }
     }
   }

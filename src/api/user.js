@@ -29,31 +29,32 @@ export function logout() {
     method: 'post'
   })
 }
-export function addUser(userdto) {
+export function addUser(data) {
   return request({
     url: '/user/add',
     method: 'post',
-    params: { userdto }
+    data
   })
 }
-export function deleteUser(userId) {
+export function deleteUser(data) {
   return request({
     url: '/user/delete',
     method: 'delete',
-    params: { userId }
+    data
   })
 }
-export function getUsers() {
-  return request({
-    url: '/user/search',
-    method: 'get'
-    // params: {  }
-  })
-}
-export function updateUser(user) {
+
+export function updateUser(data) {
   return request({
     url: '/user/update',
     method: 'put',
-    params: { user }
+    data
+  })
+}
+export function getUsers(data) {
+  return request({
+    url: '/user/list',
+    method: 'get',
+    data
   })
 }

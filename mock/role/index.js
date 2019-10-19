@@ -82,7 +82,9 @@ export default [
     response: _=>{
       return {
         code: 20000,
-        data:'success'
+        data:{
+          status: 'success'
+        }
       }
     }
   },
@@ -94,7 +96,9 @@ export default [
     response: _=>{
       return {
         code: 20000,
-        data:'success'
+        data:{
+          status: 'success'
+        }
       }
     }
   }

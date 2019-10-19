@@ -9,7 +9,6 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         Add
       </el-button>
-
     </div>
 
     <el-table
@@ -53,7 +52,6 @@
         </template>
       </el-table-column>
 
-
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -68,12 +66,8 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-
-
-
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-
 
         <el-form-item v-show="false" prop="id">
           <el-input v-model="temp.id" />
@@ -98,22 +92,15 @@
         </el-button>
       </div>
     </el-dialog>
-
-
   </div>
 </template>
 
 <script>
   import {getRoles,addRole,updateRole, deleteRole} from '@/api/role'
-  import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
 
-
-
-
-
   export default {
-    name: 'ComplexTable',
+    name: 'Role',
     components: { Pagination },
 
     data() {
@@ -227,7 +214,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             const tempData = Object.assign({}, this.temp)
-            tempData.createTime = +new Date(tempData.createTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+            tempData.createTime = +new Date(tempData.createTime)
             updateRole(tempData).then(() => {
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
@@ -247,11 +234,9 @@
           }
         })
       },
+
       handleDelete(row) {
-
         const index = this.list.indexOf(row)
-
-
         this.$confirm("确认删除？",'Warning',{
           confirmButtonText: 'Confirm',
           cancelButtonText: 'Cancel',
@@ -269,23 +254,8 @@
         }).catch(err => { console.error(err) })
       },
 
-      formatJson(filterVal, jsonData) {
-        return jsonData.map(v => filterVal.map(j => {
-          if (j === 'createTime') {
-            return parseTime(v[j])
-          } else {
-            return v[j]
-          }
-        }))
-      },
-      // getSortClass: function(key) {
-      //   const sort = this.listQuery.sort
-      //   return sort === `+${key}`
-      //     ? 'asc'
-      //     : sort === `-${key}`
-      //       ? 'desc'
-      //       : ''
-      // }
+
+
     }
   }
 </script>

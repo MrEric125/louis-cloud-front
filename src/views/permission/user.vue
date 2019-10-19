@@ -1,271 +1,269 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAddUser">New User</el-button>
+    <div class="filter-container">
+      <el-input v-model="listQuery.username" placeholder="注册名" style="width: 200px;" class="filter-item" @change="handleFilter" />
 
-    <el-table :data="usersList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="User Key" width="220">
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        Search
+      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        Add
+      </el-button>
+    </div>
+
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+
+      @sort-change="sortChange"
+    >
+
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80"  >
         <template slot-scope="scope">
-          {{ scope.row.key }}
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="User Name" width="220">
+
+      <el-table-column label="用户名" prop="username" sortable="custom" width="150px" >
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="header-center" label="Description">
+      <el-table-column label="中文名" prop="realName" sortable="custom" width="150px" align="center" >
         <template slot-scope="scope">
-          {{ scope.row.description }}
+          <span>{{ scope.row.realName }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Operations">
+
+      <el-table-column label="邮箱"  prop="email" sortable="custom" min-width="150px" >
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope)">Edit</el-button>
-          <el-button type="danger" size="small" @click="handleDelete(scope)">Delete</el-button>
+          <span>{{ scope.row.email }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="电话"  prop="phone" sortable="custom" min-width="150px" >
+        <template slot-scope="scope">
+          <span>{{ scope.row.phone }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="注册时间" prop="registryTime" sortable="custom" width="150px" align="center" >
+        <template slot-scope="scope">
+          <span>{{ scope.row.registryTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+            Edit
+          </el-button>
+          <el-button  size="mini" type="danger" @click="handleDelete(row)">
+            Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit User':'New User'">
-      <el-form :model="user" label-width="80px" label-position="left">
-        <el-form-item label="Name">
-          <el-input v-model="user.name" placeholder="User Name" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+
+        <el-form-item v-show="false" prop="id">
+          <el-input v-model="temp.id" />
         </el-form-item>
-        <el-form-item label="Desc">
-          <el-input
-            v-model="user.description"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            type="textarea"
-            placeholder="User Description"
-          />
+        <el-form-item label="用户名" prop="zhName">
+          <el-input v-model="temp.username" />
         </el-form-item>
-        <el-form-item label="Menus">
-          <el-tree
-            ref="tree"
-            :check-strictly="checkStrictly"
-            :data="routesData"
-            :props="defaultProps"
-            show-checkbox
-            node-key="path"
-            class="permission-tree"
-          />
+        <el-form-item label="中文名">
+          <el-input v-model="temp.realName" />
         </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="temp.email" />
+        </el-form-item>
+        <el-form-item label="电话">
+        <el-input v-model="temp.phone" />
+        </el-form-item>
+
       </el-form>
-      <div style="text-align:right;">
-        <el-button type="danger" @click="dialogVisible=false">Cancel</el-button>
-        <el-button type="primary" @click="confirmUser">Confirm</el-button>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          Cancel
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          Confirm
+        </el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import path from 'path'
-  import { deepClone } from '@/utils'
-  import { getRoutes,addUser, deleteUser, getUsers,updateUser} from '@/api/user'
-
-  const defaultUser = {
-    key: '',
-    name: '',
-    description: '',
-    routes: []
-  }
+  import {getUsers,updateUser,deleteUser, addUser} from '@/api/user'
+  import {} from '@/api/user'
+  import Pagination from '@/components/Pagination'
 
   export default {
+    name: 'User',
+    components: { Pagination },
+
     data() {
       return {
-        user: Object.assign({}, defaultUser),
-        routes: [],
-        usersList: [],
-        dialogVisible: false,
-        dialogType: 'new',
-        checkStrictly: false,
-        defaultProps: {
-          children: 'children',
-          label: 'title'
-        }
-      }
-    },
-    computed: {
-      routesData() {
-        return this.routes
+        tableKey: 0,
+        list: null,
+        total: 0,
+        currentPage:1,
+        pageSize:10,
+        listLoading: false,
+        //查询条件
+        listQuery: {
+          page: 1,
+          limit: 10,
+          username: undefined,
+          realName: undefined,
+          registryTime: undefined,
+          email:undefined,
+          phone: undefined,
+          sort: 'id',
+          sortCondition:'desc'
+        },
+        temp: {
+          id: undefined,
+          username: 1,
+          realName: '',
+          createTime: new Date(),
+          email: undefined,
+          phone: undefined,
+
+        },
+        dialogFormVisible: false,
+        dialogStatus: '',
+        textMap: {
+          update: '编辑',
+          create: '创建'
+        },
+
+        rules: {
+          createTime: [{ type: 'date', required: true, message: 'createTime is required', trigger: 'change' }],
+        },
+        downloadLoading: false
       }
     },
     created() {
-      // Mock: get all routes and users list from server
-      this.getRoutes()
-      this.getUsers()
+      this.getList()
     },
     methods: {
-      async getRoutes() {
-        const res = await getRoutes()
-        this.serviceRoutes = res.data
-        this.routes = this.generateRoutes(res.data)
-      },
-      async getUsers() {
-        const res = await getUsers()
-        this.usersList = res.data
-      },
-
-      // Reshape the routes structure so that it looks the same as the sidebar
-      __generateRoutes(routes, basePath = '/') {
-        const res = []
-
-        for (let route of routes) {
-          // skip some route
-          if (route.hidden) { continue }
-
-          const onlyOneShowingChild = this.onlyOneShowingChild(route.children, route)
-
-          if (route.children && onlyOneShowingChild && !route.alwaysShow) {
-            route = onlyOneShowingChild
-          }
-          debugger
-
-          const data = {
-            path: path.resolve(basePath, route.path),
-            title: route.meta && route.meta.title
-
-          }
-
-          // recursive child routes
-          if (route.children) {
-            data.children = this.generateRoutes(route.children, data.path)
-          }
-          res.push(data)
-        }
-        return res
-      },
-      __generateArr(routes) {
-        let data = []
-        routes.forEach(route => {
-          data.push(route)
-          if (route.children) {
-            const temp = this.generateArr(route.children)
-            if (temp.length > 0) {
-              data = [...data, ...temp]
-            }
-          }
+      getList() {
+        getUsers(this.listQuery).then(response=>{
+          this.list=response.data.list
+          this.total=response.data.total
         })
-        return data
+
       },
-      handleAddUser() {
-        this.user = Object.assign({}, defaultUser)
-        if (this.$refs.tree) {
-          this.$refs.tree.setCheckedNodes([])
+      handleFilter() {
+        this.listQuery.page = 1
+        this.getList()
+      },
+      sortChange(data) {
+        const { prop, order } = data
+        this.listQuery.sort = prop == null ? 'id' : prop;
+        this.listQuery.sortCondition = order==='ascending'?'asc':'desc';
+        this.handleFilter()
+      },
+
+      resetTempRole() {
+        this.temp = {
+          id: undefined,
+          username: "",
+          realName: '',
+          registryTime: new Date(),
+          email: '',
+          phone: '',
+
         }
-        this.dialogType = 'new'
-        this.dialogVisible = true
       },
-      handleEdit(scope) {
-        this.dialogType = 'edit'
-        this.dialogVisible = true
-        this.checkStrictly = true
-        this.user = deepClone(scope.row)
+      handleCreate() {
+        this.resetTempRole()
+        this.dialogStatus = 'create'
+        this.dialogFormVisible = true
         this.$nextTick(() => {
-          const routes = this.__generateRoutes(this.user.routes)
-          this.$refs.tree.setCheckedNodes(this.__generateArr(routes))
-          // set checked state of a node not affects its father and child nodes
-          this.checkStrictly = false
+          this.$refs['dataForm'].clearValidate()
         })
       },
-      handleDelete({ $index, row }) {
-        this.$confirm('Confirm to remove the user?', 'Warning', {
+      createData() {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            //  todo mock a id
+            this.temp.id = parseInt(Math.random() * 100) + 1024
+            addUser(this.temp).then(() => {
+              this.list.unshift(this.temp)
+              this.dialogFormVisible = false
+              this.$notify({
+                title: 'Success',
+                message: 'Created Successfully',
+                type: 'success',
+                duration: 2000
+              })
+            })
+          }
+        })
+      },
+      handleUpdate(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        this.temp.createTime = new Date(this.temp.createTime)
+        this.dialogStatus = 'update'
+        this.dialogFormVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      updateData() {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            const tempData = Object.assign({}, this.temp)
+            tempData.createTime = +new Date(tempData.createTime)
+            updateUser(tempData).then(() => {
+              for (const v of this.list) {
+                if (v.id === this.temp.id) {
+                  const index = this.list.indexOf(v)
+                  this.list.splice(index, 1, this.temp)
+                  break
+                }
+              }
+              this.dialogFormVisible = false
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
+                type: 'success',
+                duration: 2000
+              })
+            })
+          }
+        })
+      },
+
+      handleDelete(row) {
+        const index = this.list.indexOf(row)
+        this.$confirm("确认删除？",'Warning',{
           confirmButtonText: 'Confirm',
           cancelButtonText: 'Cancel',
           type: 'warning'
-        })
-          .then(async() => {
-            await deleteUser(row.key)
-            this.usersList.splice($index, 1)
-            this.$message({
-              type: 'success',
-              message: 'Delete succed!'
-            })
-          })
-          .catch(err => { console.error(err) })
-      },
-      generateTree(routes, basePath = '/', checkedKeys) {
-        const res = []
-
-        for (const route of routes) {
-          const routePath = path.resolve(basePath, route.path)
-
-          // recursive child routes
-          if (route.children) {
-            route.children = this.generateTree(route.children, routePath, checkedKeys)
-          }
-
-          if (checkedKeys.includes(routePath) || (route.children && route.children.length >= 1)) {
-            res.push(route)
-          }
-        }
-        return res
-      },
-      async confirmUser() {
-        const isEdit = this.dialogType === 'edit'
-
-        const checkedKeys = this.$refs.tree.getCheckedKeys()
-        this.user.routes = this.generateTree(deepClone(this.serviceRoutes), '/', checkedKeys)
-
-        if (isEdit) {
-          await updateUser(this.user.key, this.user)
-          for (let index = 0; index < this.usersList.length; index++) {
-            if (this.usersList[index].key === this.user.key) {
-              this.usersList.splice(index, 1, Object.assign({}, this.user))
-              break
+        }).then(async ()=>{
+          await deleteUser(row).then(response=>{
+            if ('success'===response.data){
+              this.list.splice(index,1)
+              this.$message({
+                type: 'success',
+                message: 'Delete success!'
+              })
             }
-          }
-        } else {
-          const { data } = await addUser(this.user)
-          this.user.key = data.key
-          this.usersList.push(this.user)
-        }
-
-        const { description, key, name } = this.user
-        this.dialogVisible = false
-        this.$notify({
-          title: 'Success',
-          dangerouslyUseHTMLString: true,
-          message: `
-            <div>User Key: ${key}</div>
-            <div>User Name: ${name}</div>
-            <div>Description: ${description}</div>
-          `,
-          type: 'success'
-        })
+          })
+        }).catch(err => { console.error(err) })
       },
-      // reference: src/view/layout/components/Sidebar/SidebarItem.vue
-      onlyOneShowingChild(children = [], parent) {
-        let onlyOneChild = null
-        const showingChildren = children.filter(item => !item.hidden)
-
-        // When there is only one child route, the child route is displayed by default
-        if (showingChildren.length === 1) {
-          onlyOneChild = showingChildren[0]
-          onlyOneChild.path = path.resolve(parent.path, onlyOneChild.path)
-          return onlyOneChild
-        }
-
-        // Show parent if there are no child route to display
-        if (showingChildren.length === 0) {
-          onlyOneChild = { ... parent, path: '', noShowingChildren: true }
-          return onlyOneChild
-        }
-
-        return false
-      }
     }
   }
 </script>
-
-<style lang="scss" scoped>
-.app-container {
-  .users-table {
-    margin-top: 30px;
-  }
-  .permission-tree {
-    margin-bottom: 30px;
-  }
-}
-</style>
