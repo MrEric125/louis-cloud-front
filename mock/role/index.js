@@ -37,7 +37,7 @@ export default [
     url: '/role/list',
     type: 'get',
     response: config=> {
-      const {enName,page=1,limit=20,sort,sortCondition}=config.query
+      const {enName,page=1,limit,sort,sortCondition}=config.query
 
       let mockList=roles.filter(item=>{
         return !(enName && item.enName !== enName);
@@ -53,12 +53,13 @@ export default [
       )
       return {
         code: 20000,
-        data: {
+        result: {
           list: pageList,
-          total: mockList.length
-          // pageSize: 10,
-          // pageNum: 1
-        }
+
+        },
+        total: mockList.length,
+        pageSize: limit,
+        pageNum: page
       }
     }
   },
@@ -69,7 +70,7 @@ export default [
     type: 'post',
     response: {
       code: 20000,
-      data: {
+      result: {
         key: Mock.mock('@integer(300, 5000)')
       }
     }
@@ -82,9 +83,7 @@ export default [
     response: _=>{
       return {
         code: 20000,
-        data:{
-          status: 'success'
-        }
+        status: 'success'
       }
     }
   },
@@ -96,26 +95,27 @@ export default [
     response: _=>{
       return {
         code: 20000,
-        data:{
-          status: 'success'
-        }
+        result:'success'
       }
     }
   },
   {
     url: '/role/selectOne',
     type: 'get',
-    response: _=>{
+    response: data=>{
+      const {enName} = data.query;
+      const single=roles.filter(obj=>{
+        return obj.enName === enName;
+      })
+      let obj = null;
+      if (single) {
+        obj = single[0];
+      }
       return {
         code: 20000,
-        result:{
-              id:'2',
-              zhName:'用户',
-              enName:'user',
-              description:'deddddsdsd'
-        },
+        result:obj,
         status: 'success'
-      }
+      };
     }
   }
 ]

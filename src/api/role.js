@@ -42,6 +42,6 @@ export function selectOne(data) {
   return request({
     url: `/role/selectOne`,
     method: 'get',
-    data
+    params: data
   })
 }

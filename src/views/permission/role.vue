@@ -103,9 +103,9 @@
     components: { Pagination },
 
     data() {
-      var checkRoleName = (rule, value, callback) => {
+      let checkRoleName = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error('年龄不能为空'));
+          return callback(new Error('英文角色名不能为空'));
         }else {
           this.selectOne(rule, value, callback);
         }
@@ -174,8 +174,8 @@
     methods: {
       getList() {
         getRoles(this.listQuery).then(response=>{
-          this.list=response.data.list
-          this.total=response.data.total
+          this.list=response.result.list
+          this.total=response.result.total
         })
 
       },
@@ -262,7 +262,11 @@
       },
 
       selectOne(rule,value,callback){
-        selectOne(this.temp).then(response=>{
+        // this.temp[rule] = value;
+        const query={enName: value}
+
+        selectOne(query).then(response=>{
+
           if ("success" === response.status && response.result) {
             callback(new Error('角色名已存在'));
           } else {
@@ -270,8 +274,6 @@
           }
         });
       },
-
-
 
       handleDelete(row) {
         const index = this.list.indexOf(row)
