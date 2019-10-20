@@ -43,7 +43,6 @@
       <el-table-column label="角色描述"  prop="description" sortable="custom" min-width="150px" >
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
-<!--          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />-->
         </template>
       </el-table-column>
       <el-table-column label="创建时间" prop="createTime" sortable="custom" width="150px" align="center" >
@@ -67,19 +66,19 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:50px;">
 
         <el-form-item v-show="false" prop="id">
           <el-input v-model="temp.id" />
         </el-form-item>
         <el-form-item label="中文角色" prop="zhName">
-          <el-input v-model="temp.zhName" />
+          <el-input style="margin-left: 30px" v-model="temp.zhName" />
         </el-form-item>
-        <el-form-item label="英文角色">
-          <el-input v-model="temp.enName" />
+        <el-form-item label="英文角色" prop="enName" >
+          <el-input style="margin-left: 30px" v-model="temp.enName" />
         </el-form-item>
         <el-form-item label="角色描述">
-          <el-input v-model="temp.description" />
+          <el-input style="margin-left: 30px" v-model="temp.description" />
         </el-form-item>
 
       </el-form>
@@ -96,7 +95,7 @@
 </template>
 
 <script>
-  import {getRoles,addRole,updateRole, deleteRole} from '@/api/role'
+  import {getRoles,addRole,updateRole, deleteRole,selectOne} from '@/api/role'
   import Pagination from '@/components/Pagination'
 
   export default {
@@ -104,6 +103,14 @@
     components: { Pagination },
 
     data() {
+      var checkRoleName = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('年龄不能为空'));
+        }else {
+          this.selectOne(rule, value, callback);
+        }
+
+      };
       return {
         tableKey: 0,
         list: null,
@@ -124,7 +131,7 @@
         },
         temp: {
           id: undefined,
-          enName: 1,
+          enName: '',
           zhName: '',
           createTime: new Date(),
           description: ''
@@ -137,7 +144,26 @@
         },
 
         rules: {
-          createTime: [{ type: 'date', required: true, message: 'createTime is required', trigger: 'change' }],
+          enName: [
+            {
+              required: true,
+              message: '角色名为必填',
+              trigger: 'blur'
+            },
+            {
+              validator:checkRoleName,trigger:'blur'
+            }
+              ],
+          zhName: [
+            {
+              required: true,
+              message: '角色名为必填',
+              trigger: 'blur'
+            },
+            {
+              validator:checkRoleName,trigger:'blur'
+            }
+          ]
         },
         downloadLoading: false
       }
@@ -235,6 +261,18 @@
         })
       },
 
+      selectOne(rule,value,callback){
+        selectOne(this.temp).then(response=>{
+          if ("success" === response.status && response.result) {
+            callback(new Error('角色名已存在'));
+          } else {
+            callback()
+          }
+        });
+      },
+
+
+
       handleDelete(row) {
         const index = this.list.indexOf(row)
         this.$confirm("确认删除？",'Warning',{
@@ -243,7 +281,7 @@
           type: 'warning'
         }).then(async ()=>{
           await deleteRole(row).then(response=>{
-            if ('success'===response.data){
+            if ('message'===response.message){
               this.list.splice(index,1)
               this.$message({
                 type: 'success',

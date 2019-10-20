@@ -101,5 +101,21 @@ export default [
         }
       }
     }
+  },
+  {
+    url: '/role/selectOne',
+    type: 'get',
+    response: _=>{
+      return {
+        code: 20000,
+        result:{
+              id:'2',
+              zhName:'用户',
+              enName:'user',
+              description:'deddddsdsd'
+        },
+        status: 'success'
+      }
+    }
   }
 ]

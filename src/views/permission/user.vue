@@ -59,10 +59,13 @@
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
+            编辑
+          </el-button>
+          <el-button  size="mini" type="warning" @click="handleDelete(row)">
+            授权
           </el-button>
           <el-button  size="mini" type="danger" @click="handleDelete(row)">
-            Delete
+            删除
           </el-button>
         </template>
       </el-table-column>

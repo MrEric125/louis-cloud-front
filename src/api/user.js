@@ -51,10 +51,10 @@ export function updateUser(data) {
     data
   })
 }
-export function getUsers(data) {
+export function getUsers(query) {
   return request({
     url: '/user/list',
     method: 'get',
-    data
+    params: query
   })
 }

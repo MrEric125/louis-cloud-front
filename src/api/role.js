@@ -38,3 +38,10 @@ export function deleteRole(data) {
     data
   })
 }
+export function selectOne(data) {
+  return request({
+    url: `/role/selectOne`,
+    method: 'get',
+    data
+  })
+}
