@@ -35,11 +35,12 @@ export function mockXHR() {
     return function(options) {
       let result = null
       if (respond instanceof Function) {
-        const { body, type, url } = options
+        const { body, type, url,header } = options
         // https://expressjs.com/en/4x/api.html#req
         result = respond({
           method: type,
           body: JSON.parse(body),
+          header: JSON.parse(header),
           query: param2Obj(url)
         })
       } else {

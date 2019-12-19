@@ -27,16 +27,22 @@ const mutations = {
     state.roles = roles
   }
 }
-
+// 后端返回过来的数据结构一般为 result-->再是自己想要的值
 const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
+
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+
+        const { result } = response
+        if (!result){
+          reject("登录接口没有相应数据")
+        }
+        // debugger
+        commit('SET_TOKEN', result.token)
+        setToken(result.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -48,13 +54,13 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
 
-        if (!data) {
+        const { info } = response.result
+        if (!info) {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction } = info
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -65,7 +71,7 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        resolve(info)
       }).catch(error => {
         reject(error)
       })

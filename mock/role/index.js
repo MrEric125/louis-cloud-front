@@ -26,7 +26,7 @@ export default [
     type: 'get',
     response: _ => {
       return {
-        code: 20000,
+        code: 200,
         data: routes
       }
     }
@@ -52,7 +52,7 @@ export default [
         index < limit * page && index >= limit * (page - 1)
       )
       return {
-        code: 20000,
+        code: 200,
         result: {
           list: pageList,
 
@@ -69,7 +69,7 @@ export default [
     url: '/role/add',
     type: 'post',
     response: {
-      code: 20000,
+      code: 200,
       result: {
         key: Mock.mock('@integer(300, 5000)')
       }
@@ -82,7 +82,7 @@ export default [
     type: 'put',
     response: _=>{
       return {
-        code: 20000,
+        code: 200,
         status: 'success'
       }
     }
@@ -94,7 +94,7 @@ export default [
     type: 'delete',
     response: _=>{
       return {
-        code: 20000,
+        code: 200,
         result:'success'
       }
     }
@@ -112,7 +112,7 @@ export default [
         obj = single[0];
       }
       return {
-        code: 20000,
+        code: 200,
         result:obj,
         status: 'success'
       };

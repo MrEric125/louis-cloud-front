@@ -4,12 +4,9 @@ import {compare} from "../src/utils";
 // import { deepClone } from '../src/utils'
 
 const tokens = {
-  admin: {
-    token: 'admin-token'
-  },
-  editor: {
-    token: 'editor-token'
-  }
+  admin: 'admin-token',
+  editor: 'editor-token'
+
 }
 // const routes = deepClone([...constantRoutes, ...asyncRoutes])
 
@@ -63,8 +60,11 @@ export default [
       }
 
       return {
-        code: 20000,
-        data: token
+        code:200,
+        message:"success",
+        result:{
+          token: token
+        }
       }
     }
   },
@@ -74,8 +74,8 @@ export default [
     type: 'post',
     response: _ => {
       return {
-        code: 20000,
-        data: 'success'
+        code: 200,
+        message: 'success'
       }
     }
   },
@@ -84,7 +84,7 @@ export default [
     type: 'get',
     response: _ => {
       return {
-        code: 20000,
+        code: 200,
         data: 'success'
       }
     }
@@ -95,20 +95,34 @@ export default [
     url: '/user/info\.*',
     type: 'get',
     response: config => {
+      debugger
+      const  {header}=config.header
+      const {body} = config.body
       const { token } = config.query
-      const info = users[token]
+      let info = users[token];
+
 
       // mock error
       if (!info) {
+        info=users['admin-token']
         return {
-          code: 50008,
-          message: 'Login failed, unable to get user details.'
+          code: 200,
+          message: 'Login failed, to use default user token',
+          result:{
+            info: info,
+            header: header,
+            body: body
+          }
         }
       }
 
       return {
-        code: 20000,
-        data: info
+        code: 200,
+        message:'success',
+        result: {
+          body: body,
+          header: header
+        }
       }
     }
   },
@@ -134,7 +148,7 @@ export default [
         index < limit * page && index >= limit * (page - 1)
       )
       return {
-        code: 20000,
+        code: 200,
         data: {
           list: pageList,
           total: mockList.length
@@ -150,7 +164,7 @@ export default [
     url: '/user/add',
     type: 'post',
     response: {
-      code: 20000,
+      code: 200,
       data: {
         key: Mock.mock('@integer(300, 5000)')
       }
@@ -163,7 +177,7 @@ export default [
     type: 'put',
     response: _=>{
       return {
-        code: 20000,
+        code: 200,
         data:{
           status: 'success'
         }
@@ -177,10 +191,10 @@ export default [
     url: '/user/delete',
     type: 'delete',
     response: {
-      code: 20000,
+      code: 200,
       response: _=>{
         return {
-          code: 20000,
+          code: 200,
           data:{
             status: 'success'
           }
