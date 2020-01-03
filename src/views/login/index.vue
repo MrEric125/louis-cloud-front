@@ -101,6 +101,7 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
+
         const query = route.query
         if (query) {
           this.redirect = query.redirect
@@ -136,6 +137,9 @@ export default {
         this.capsTooltip = false
       }
     },
+    /**
+     * 显示密码方法
+     */
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -146,16 +150,28 @@ export default {
         this.$refs.password.focus()
       })
     },
+
+    /**
+     * 登录接口
+     */
     handleLogin() {
+      /**
+       * $refs三种用法：
+       * 1. ref 加在普通的元素上，用this.$refs.（ref值） 获取到的是dom元素
+       * 2. ref 加在子组件上，用this.$refs.（ref值） 获取到的是组件实例，可以使用组件的所有方法。在使用方法的时候直接this.$refs.（ref值）.方法（） 就可以使用了。
+       * 3. 如何利用 v-for 和 ref 获取一组数组或者dom 节点
+       */
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
+              //登录成功之后调转到的页面
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
             .catch(() => {
+              //登录失败之后的处理
               this.loading = false
             })
         } else {

@@ -39,7 +39,7 @@ router.beforeEach(async(to, from, next) => {
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
-          // dynamically add accessible routes
+          //在这个地方动态的将Routes添加到路由中
           router.addRoutes(accessRoutes)
 
           // hack method to ensure that addRoutes is complete

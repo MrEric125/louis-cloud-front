@@ -48,15 +48,23 @@ export default [
     url: '/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
+      const { username,password } = config.body
+      console.log(config)
       const token = tokens[username]
+
+      if (password !== '123456') {
+        return {
+          code: 60204,
+          message: 'Account and password are incorrect.'
+        }
+      }
 
       // mock error
       if (!token) {
         return {
           code: 60204,
           message: 'Account and password are incorrect.'
-        }
+        };
       }
 
       return {
@@ -93,7 +101,7 @@ export default [
   // get user info
   {
     url: '/user/info\.*',
-    type: 'get',
+    type: 'post',
     response: config => {
       debugger
       const  {header}=config.header

@@ -36,6 +36,7 @@ import tableRouter from './modules/table'
  * constantRoutes
  * a base page that does not have permission requirements
  * all roles can be accessed
+ * 这些表示不需要动态生成的路由，
  */
 export const constantRoutes = [
   {
@@ -88,6 +89,7 @@ export const constantRoutes = [
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
+ * 这些表示需要动态生成的路由，
  */
 export const asyncRoutes = [
   {
@@ -349,29 +351,7 @@ export const asyncRoutes = [
     ]
   },
 
-  // {
-  //   path: '/clipboard',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/clipboard/index'),
-  //       name: 'ClipboardDemo',
-  //       meta: { title: 'Clipboard', icon: 'clipboard' }
-  //     }
-  //   ]
-  // },
 
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://github.com/MrEric125/louis-cloud-front',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

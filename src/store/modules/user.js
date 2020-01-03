@@ -28,8 +28,14 @@ const mutations = {
   }
 }
 // 后端返回过来的数据结构一般为 result-->再是自己想要的值
+
 const actions = {
-  // user login
+  /**
+   * 登录成功之后，会将token存储起来
+   * @param commit
+   * @param userInfo
+   * @returns {Promise<any>}
+   */
   login({ commit }, userInfo) {
     const { username, password } = userInfo
 
