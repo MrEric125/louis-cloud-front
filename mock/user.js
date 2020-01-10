@@ -49,7 +49,7 @@ export default [
     type: 'post',
     response: config => {
       const { username,password } = config.body
-      console.log(config)
+      // console.log(config)
       const token = tokens[username]
 
       if (password !== '123456') {

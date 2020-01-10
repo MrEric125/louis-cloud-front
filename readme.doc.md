@@ -42,4 +42,31 @@ result:响应实体，前两个响应数据表示的是一种状态，result这�
 
 
 ===============================
-$refs,$store,$router等的用法
+vue 实例属性
+$data
+$props
+$options
+$parent
+$root
+$children
+$slots
+$scopedSlots
+$refs
+$isServer
+$attrs
+$listeners
+
+实例方法/数据
+$watch
+$set
+$delete
+实例方法/事件
+$on
+$once
+$off
+$emit
+生命周期
+$mount
+$forceUpdate
+$nextTick
+$destroy
