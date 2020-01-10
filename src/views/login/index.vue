@@ -1,12 +1,11 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">登录表单</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="username" class="form-item-input">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -16,13 +15,12 @@
           placeholder="Username"
           name="username"
           type="text"
-          tabindex="1"
-          autocomplete="on"
+          clearable
         />
       </el-form-item>
 
       <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
+        <el-form-item prop="password" class="form-item-input">
           <span class="svg-container">
             <svg-icon icon-class="password" />
           </span>
@@ -45,7 +43,7 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" class="login-button" @click.native.prevent="handleLogin">登录</el-button>
 
     </el-form>
 
@@ -216,7 +214,7 @@ export default {
 
 $bg:#283443;
 $light_gray:#fff;
-$cursor: #fff;
+$cursor: #283443;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -226,10 +224,12 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+
   .el-input {
     display: inline-block;
     height: 47px;
     width: 85%;
+
 
     input {
       background: transparent;
@@ -237,7 +237,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: gray;
       height: 47px;
       caret-color: $cursor;
 
@@ -249,10 +249,15 @@ $cursor: #fff;
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /*border: 1px solid rgba(255, 255, 255, 0.1);*/
+    border: 1px solid #dedede;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     color: #454545;
+    &:hover,&:active,&:focus{
+      border-color: #57a3f3;
+    }
+
   }
 }
 </style>
@@ -262,19 +267,45 @@ $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
+
+.login-button{
+  width: 80%;
+  height: 50px;
+  margin: 20px 0 0 40px;
+  background: none;
+  color: #409eff;
+  &:hover,&:active,&:focus{
+    background: #57a3f3;
+    color: #ffffff;
+  }
+
+
+
+}
+
+.form-item-input{
+  width: 80%;
+  margin-left: 40px;
+
+}
+
 .login-container {
   min-height: 100%;
   width: 100%;
+  /*background-image: url("/public/img/bg/bg.jpg");*/
   background-color: $bg;
   overflow: hidden;
 
   .login-form {
+    border: 1px solid gray;
+    border-radius:10px;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    padding: 100px 35px 50px;
+    margin: 100px auto;
     overflow: hidden;
+    background: #ffffff;
   }
 
   .tips {
@@ -302,8 +333,8 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
+      color: gray;
+      margin: 0px 0px 40px auto;
       text-align: center;
       font-weight: bold;
     }
