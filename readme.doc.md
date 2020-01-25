@@ -70,3 +70,9 @@ $mount
 $forceUpdate
 $nextTick
 $destroy
+
+
+## 登录功能
+
+1. 入口：
+views/login/index.vue#handleLogin()
