@@ -162,9 +162,10 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+        // vue状态管理
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              //登录成功之后调转到的页面
+              //登录成功之后调转到的页面,Router相关知识
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })

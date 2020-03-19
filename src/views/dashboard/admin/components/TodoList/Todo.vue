@@ -7,13 +7,13 @@
         type="checkbox"
         @change="toggleTodo( todo)"
       >
-      <label @dblclick="editing = true" v-text="todo.text" />
+      <label @dblclick="editing = true" v-text="todo.todoText" />
       <button class="destroy" @click="deleteTodo( todo )" />
     </div>
     <input
       v-show="editing"
       v-focus="editing"
-      :value="todo.text"
+      :value="todo.todoText"
       class="edit"
       @keyup.enter="doneEdit"
       @keyup.esc="cancelEdit"
@@ -52,6 +52,8 @@ export default {
       this.$emit('deleteTodo', todo)
     },
     editTodo({ todo, value }) {
+
+      // 触发当前实例上的事件。附加参数都会传给监听器回调。
       this.$emit('editTodo', { todo, value })
     },
     toggleTodo(todo) {
@@ -73,7 +75,7 @@ export default {
       }
     },
     cancelEdit(e) {
-      e.target.value = this.todo.text
+      e.target.value = this.todo.todoText
       this.editing = false
     }
   }

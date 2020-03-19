@@ -5,12 +5,14 @@ import user from './user'
 import role from './role'
 import article from './article'
 import search from './remote-search'
+import todos from './todos.js'
 
 const mocks = [
   ...user,
   ...role,
   ...article,
-  ...search
+  ...search,
+  ...todos
 ]
 
 // for front mock
@@ -57,6 +59,7 @@ export function mockXHR() {
 
 // for mock server
 const responseFake = (url, type, respond) => {
+  console.log(url)
   return {
     url: new RegExp(`/mock${url}`),
     type: type || 'get',

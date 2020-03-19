@@ -14,8 +14,8 @@
           :key="index"
           :todo="todo"
           @toggleTodo="toggleTodo"
-          @editTodo="editTodo"
-          @deleteTodo="deleteTodo"
+          @editTodo="handleEdit"
+          @deleteTodo="handleDel"
         />
       </ul>
     </section>
@@ -30,15 +30,13 @@
           <a :class="{ selected: visibility === key }" @click.prevent="visibility = key">{{ key | capitalize }}</a>
         </li>
       </ul>
-      <!-- <button class="clear-completed" v-show="todos.length > remaining" @click="clearCompleted">
-        Clear completed
-      </button> -->
     </footer>
   </section>
 </template>
 
 <script>
 import Todo from './Todo.vue'
+import {getTodos,delTodo,addTodo, editTodo} from '@/api/todo'
 
 const STORAGE_KEY = 'todos'
 const filters = {
@@ -46,16 +44,7 @@ const filters = {
   active: todos => todos.filter(todo => !todo.done),
   completed: todos => todos.filter(todo => todo.done)
 }
-const defalutList = [
-  { text: 'star this repository', done: false },
-  { text: 'fork this repository', done: false },
-  { text: 'follow author', done: false },
-  { text: 'vue-element-admin', done: true },
-  { text: 'vue', done: true },
-  { text: 'element-ui', done: true },
-  { text: 'axios', done: true },
-  { text: 'webpack', done: true }
-]
+
 export default {
   components: { Todo },
   filters: {
@@ -64,16 +53,19 @@ export default {
   },
   data() {
     return {
-      visibility: 'all',
+      visibility: 'all',   
       filters,
-      // todos: JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || defalutList
-      todos: defalutList
+      todos: null
     }
+  },
+  created(){
+    this.getTodoList("all")
   },
   computed: {
     allChecked() {
       return this.todos.every(todo => todo.done)
     },
+    // 过滤的思路就是将所有的待办事项都列出来，然后每次请求的时候就不请求后台数据
     filteredTodos() {
       return filters[this.visibility](this.todos)
     },
@@ -83,6 +75,7 @@ export default {
   },
   methods: {
     setLocalStorage() {
+      
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos))
     },
     addTodo(e) {
@@ -96,27 +89,48 @@ export default {
       }
       e.target.value = ''
     },
+
+    /**
+     * 获取待办列表
+     */
+    getTodoList(listquery){
+      if(!listquery){
+        listquery="all"
+      }
+      getTodos(listquery).then(response=>{
+        this.todos=response.data.todos
+      })
+      return this.todos
+
+    },
     toggleTodo(val) {
-      val.done = !val.done
-      this.setLocalStorage()
+      console.log('toggleTodo',this.todos.length)
+      // val.done = !val.done
+      // this.setLocalStorage()
     },
-    deleteTodo(todo) {
-      this.todos.splice(this.todos.indexOf(todo), 1)
-      this.setLocalStorage()
+    handleDel(todo) {
+      delTodo(todo).then(response=>{
+        this.todos=response.data.todos
+      })
     },
-    editTodo({ todo, value }) {
-      todo.text = value
+    handleEdit({ todo, value }) {
+      // todo.text = value
       this.setLocalStorage()
+      const param={todo,value}
+      editTodo(todo).then(response=>{
+        this.todos.text=response.todos
+      })
     },
     clearCompleted() {
-      this.todos = this.todos.filter(todo => !todo.done)
-      this.setLocalStorage()
+      // this.todos = this.todos.filter(todo => !todo.done)
+      // this.setLocalStorage()
+      const todo={visibility:"completed"}
+      editTodo(todo).then(response=>{
+         this.todos.text=response.todos
+      })
     },
     toggleAll({ done }) {
-      this.todos.forEach(todo => {
-        todo.done = done
-        this.setLocalStorage()
-      })
+
     }
   }
 }

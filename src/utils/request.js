@@ -21,7 +21,7 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
       // 将token保存到header中
       config.headers['X-Token'] = getToken()
-      config.headers['Authorization']=getToken()
+      config.headers['Authorization'] = getToken()
     }
     return config
   },
@@ -31,7 +31,6 @@ service.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-
 // response interceptor
 service.interceptors.response.use(
   /**
@@ -44,6 +43,7 @@ service.interceptors.response.use(
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
+
   response => {
     const res = response.data
 

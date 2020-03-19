@@ -46,7 +46,6 @@ const actions = {
         if (!result){
           reject("登录接口没有相应数据")
         }
-        // debugger
         commit('SET_TOKEN', result.token)
         setToken(result.token)
         resolve()

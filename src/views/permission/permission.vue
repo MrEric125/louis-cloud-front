@@ -148,8 +148,8 @@
     methods: {
       getList() {
         getRoles(this.listQuery).then(response=>{
-          this.list=response.data.list
-          this.total=response.data.total
+          this.list=response.result.list
+          this.total=response.result.total
         })
 
       },

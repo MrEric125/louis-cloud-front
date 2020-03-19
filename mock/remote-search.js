@@ -10,6 +10,28 @@ for (let i = 0; i < count; i++) {
 }
 NameList.push({ name: 'mock-Pan' })
 
+
+const todoList =[]
+const todoCount =10
+
+
+const visibilities=['all','active','completed']
+
+for (let index = 0; index <todoCount; index++) {
+    var rand = Math.floor( Math.random() * visibilities.length );
+    var data =visibilities.slice(rand, 1)[0];
+    todoList.push(Mock.mock({
+        id:'@increment',
+        timestamp:+Mock.Random.date('T'),
+        todo: '@first',
+        visibility: data
+
+    }))
+    
+}
+
+
+
 export default [
   // username search
   {
@@ -48,4 +70,24 @@ export default [
       }
     }
   }
+  // ,
+  // {
+  //   url: '/todo/list',
+  //   type: 'get',
+    
+  //   response:config=>{
+  //       const { visibility }=config.query
+  //       let mockList=todoList.filter(item=>{
+  //          if(visibility && item.visibility===visibility) return true
+  //          return false 
+  //       })
+  //       return{
+  //           code:200,
+  //           data:{
+  //               todos:mockList
+                
+  //           }
+  //       }
+  //   }
+  // }
 ]

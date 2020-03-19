@@ -55,11 +55,12 @@ export default [
         code: 200,
         result: {
           list: pageList,
+          total:mockList.length,
+          pageSize:limit,
+          pageNum:page
 
         },
-        total: mockList.length,
-        pageSize: limit,
-        pageNum: page
+       
       }
     }
   },

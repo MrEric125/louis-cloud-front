@@ -28,6 +28,7 @@ import * as filters from './filters' // global filters
  * please remove it before going online! ! !
  */
 import { mockXHR } from '../mock'
+// 这里有个问题，如果改成 development,响应就非常
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
@@ -43,9 +44,9 @@ Object.keys(filters).forEach(key => {
 
 Vue.config.productionTip = false
 
-Vue.config.devtools=true
+Vue.config.devtools = true
 
-var vm=new Vue({
+var vm = new Vue({
   el: '#app',
   router,
   store,

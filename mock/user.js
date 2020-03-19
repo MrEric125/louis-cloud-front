@@ -103,7 +103,7 @@ export default [
     url: '/user/info\.*',
     type: 'post',
     response: config => {
-      debugger
+    
       const  {header}=config.header
       const {body} = config.body
       const { token } = config.query
