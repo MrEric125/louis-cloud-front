@@ -2,7 +2,8 @@
   <section class="todoapp">
     <!-- header -->
     <header class="header">
-      <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="addTodo">
+      <!-- 按下enter键的时候调用addTodo -->
+      <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="handleAdd">
     </header>
     <!-- main section -->
     <section v-show="todos.length" class="main">
@@ -47,6 +48,9 @@ const filters = {
 
 export default {
   components: { Todo },
+  // 定义一些过滤器方法
+  // 可被用于一些常见的文本格式化。
+  // 过滤器可以用在两个地方：双花括号插值和 v-bind 表达式 (后者从 2.1.0+ 开始支持)
   filters: {
     pluralize: (n, w) => n === 1 ? w : w + 's',
     capitalize: s => s.charAt(0).toUpperCase() + s.slice(1)
@@ -58,6 +62,10 @@ export default {
       todos: null
     }
   },
+  /**
+   * 生命周期 beforeCreate-->created-->beforeMount-->
+   * mounted-->beforeUpdate--> beforeDestroy-->destroyed
+   */
   created(){
     this.getTodoList("all")
   },
@@ -78,13 +86,10 @@ export default {
       
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos))
     },
-    addTodo(e) {
+    handleAdd(e) {
       const text = e.target.value
       if (text.trim()) {
-        this.todos.push({
-          text,
-          done: false
-        })
+        this.todos=addTodo({"todoText":text}).then(response=>this.todos=response.data.todos)
         this.setLocalStorage()
       }
       e.target.value = ''

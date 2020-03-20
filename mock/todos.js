@@ -90,12 +90,14 @@ export default[
         type: 'post',
         
         response:config=>{
-            const { id,todo,visibility }=config.edit
+            const { todoText }=config.body
+            console.log(todoText);
+            
 
-            var lastItemId=Number( list.map(item=>item.id).pop())
+            var lastItemId=list.length
             list.push({id:lastItemId+1,
-                todo:todo,
-                visibility:visibility}
+                todoText:todoText,
+                done:false}
                 )
             return{
                 code:200,
