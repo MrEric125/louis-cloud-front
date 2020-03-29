@@ -60,23 +60,24 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
 
-        const { info } = response.result
-        if (!info) {
+        
+        const { result } = response
+        if (!result) {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = info
+        const { authorities, username, avatar, introduction } = result
 
         // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
+        if (!authorities || authorities.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
 
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
+        commit('SET_ROLES', authorities.map(item=>item.authority))
+        commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
-        resolve(info)
+        resolve(result)
       }).catch(error => {
         reject(error)
       })
@@ -116,6 +117,7 @@ const actions = {
       commit('SET_TOKEN', token)
       setToken(token)
 
+      
       const { roles } = await dispatch('getInfo')
 
       resetRouter()

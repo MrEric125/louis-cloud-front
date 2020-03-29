@@ -70,24 +70,5 @@ export default [
       }
     }
   }
-  // ,
-  // {
-  //   url: '/todo/list',
-  //   type: 'get',
-    
-  //   response:config=>{
-  //       const { visibility }=config.query
-  //       let mockList=todoList.filter(item=>{
-  //          if(visibility && item.visibility===visibility) return true
-  //          return false 
-  //       })
-  //       return{
-  //           code:200,
-  //           data:{
-  //               todos:mockList
-                
-  //           }
-  //       }
-  //   }
-  // }
+ 
 ]

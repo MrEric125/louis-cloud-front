@@ -39,10 +39,11 @@ export default[
             }
             return{
                 code:200,
-                data:{
+                result:{
                     todos:mockList
                     
-                }
+                },
+                message:"success"
             }
         }
     },{
@@ -58,9 +59,10 @@ export default[
             })
             return{
                 code:200,
-                data:{
+                result:{
                     todos:mockList 
-                }
+                },
+                message:"success"
             }
         }
     },{
@@ -78,10 +80,11 @@ export default[
             })
             return{
                 code:200,
-                data:{
+                result:{
                     todos:mockList
                     
-                }
+                },
+                message:"success"
             }
         }
     }
@@ -101,10 +104,11 @@ export default[
                 )
             return{
                 code:200,
-                data:{
+                result:{
                     todos:list
                     
-                }
+                },
+                message:"success"
             }
         }
     }

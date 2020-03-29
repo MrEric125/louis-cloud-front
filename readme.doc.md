@@ -74,5 +74,39 @@ $destroy
 
 ## 登录功能
 
-1. 入口：
-views/login/index.vue#handleLogin()
+1. 登录
+接口：
+http://localhost:9528/dev-api/user/login
+参数：
+{
+    "username": "admin",
+    "password": "123456"
+}
+响应：
+{
+    "code": 200,
+    "message": "success",
+    "result": {
+        "token": "admin-token"
+    }
+}
+2. 用户信息
+
+http://localhost:9528/dev-api/user/info
+通过header:
+Authorization: admin-token
+响应：
+{
+    "code": 200,
+    "message": "Login failed, to use default user token",
+    "result": {
+        "info": {
+            "roles": [
+                "admin"
+            ],
+            "introduction": "I am a super administrator",
+            "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+            "name": "Super Admin"
+        }
+    }
+}

@@ -6,7 +6,7 @@
       <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="handleAdd">
     </header>
     <!-- main section -->
-    <section v-show="todos.length" class="main">
+    <!-- <section v-show="todos.length" class="main">
       <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">
       <label for="toggle-all" />
       <ul class="todo-list">
@@ -19,9 +19,9 @@
           @deleteTodo="handleDel"
         />
       </ul>
-    </section>
+    </section> -->
     <!-- footer -->
-    <footer v-show="todos.length" class="footer">
+    <!-- <footer v-show="todos.length" class="footer">
       <span class="todo-count">
         <strong>{{ remaining }}</strong>
         {{ remaining | pluralize('item') }} left
@@ -31,7 +31,7 @@
           <a :class="{ selected: visibility === key }" @click.prevent="visibility = key">{{ key | capitalize }}</a>
         </li>
       </ul>
-    </footer>
+    </footer> -->
   </section>
 </template>
 
@@ -89,7 +89,7 @@ export default {
     handleAdd(e) {
       const text = e.target.value
       if (text.trim()) {
-        this.todos=addTodo({"todoText":text}).then(response=>this.todos=response.data.todos)
+        this.todos=addTodo({"todoTitle":text}).then(response=>this.todos=response.data.todos)
         this.setLocalStorage()
       }
       e.target.value = ''
@@ -103,7 +103,7 @@ export default {
         listquery="all"
       }
       getTodos(listquery).then(response=>{
-        this.todos=response.data.todos
+        this.todos=response.result
       })
       return this.todos
 
