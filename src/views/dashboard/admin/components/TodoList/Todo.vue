@@ -7,13 +7,13 @@
         type="checkbox"
         @change="toggleTodo( todo)"
       >
-      <label @dblclick="editing = true" v-text="todo.todoText" />
+      <label @dblclick="editing = true" v-text="todo.todoTitle" />
       <button class="destroy" @click="deleteTodo( todo )" />
     </div>
     <input
       v-show="editing"
       v-focus="editing"
-      :value="todo.todoText"
+      :value="todo.todoTitle"
       class="edit"
       @keyup.enter="doneEdit"
       @keyup.esc="cancelEdit"

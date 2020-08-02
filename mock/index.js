@@ -59,7 +59,6 @@ export function mockXHR() {
 
 // for mock server
 const responseFake = (url, type, respond) => {
-  console.log(url)
   return {
     url: new RegExp(`/mock${url}`),
     type: type || 'get',

@@ -220,7 +220,7 @@ export default {
           this.postForm.status = 'published'
           this.loading = false
         } else {
-          console.log('error submit!!')
+          console.log('提交失败!!')
           return false
         }
       })

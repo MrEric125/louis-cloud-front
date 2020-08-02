@@ -94,7 +94,6 @@ export default[
         
         response:config=>{
             const { todoText }=config.body
-            console.log(todoText);
             
 
             var lastItemId=list.length

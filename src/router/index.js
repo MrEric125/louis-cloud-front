@@ -11,6 +11,8 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 
+import {menuList} from '@/api/menu'
+
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -38,6 +40,10 @@ import tableRouter from './modules/table'
  * all roles can be accessed
  * 这些表示不需要动态生成的路由，
  */
+
+
+
+ 
 export const constantRoutes = [
   {
     path: '/redirect',
@@ -143,10 +149,23 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/menu',
+    component: ()=>import('@/views/menu'),
+    redirect: '/Menu/list',
+    alwaysShow: false, // will always show the root menu
+    name: 'menu',
+    meta: {
+      title: '菜单管理',
+      icon: 'dashboard',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    }
+
+  },
+  {
     path: '/product',
     component: Layout,
     redirect: '/product/list',
-    alwaysShow: true, // will always show the root menu
+    alwaysShow: true,
     name: 'product',
     meta: {
       title: '商品管理',
@@ -159,7 +178,8 @@ export const asyncRoutes = [
         component:()=>import('@/views/product/list'),
         name:'商品列表',
         meta:{
-          title: '商品列表', noCache: true
+          title: '商品列表',
+          noCache: true
         }
       },
       {
@@ -167,7 +187,8 @@ export const asyncRoutes = [
         component:()=>import('@/views/product/insert'),
         name:'添加商品',
         meta:{
-          title: '添加商品', noCache: true
+          title: '添加商品',
+          noCache: true
         }
       },
       {
@@ -356,6 +377,19 @@ export const asyncRoutes = [
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
+
+
+
+
+// export const asyncRoutes=[];
+// menuList({"roles":["admin"]}).then(response=>{
+//   response.result.menus.map(item=>item.component="() => import('@/views/permission/menu')")
+//   asyncRoutes.push()
+//   console.log(asyncRoutes)
+// })
+
+
+
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

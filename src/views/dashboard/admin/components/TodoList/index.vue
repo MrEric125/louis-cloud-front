@@ -6,7 +6,7 @@
       <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="handleAdd">
     </header>
     <!-- main section -->
-    <!-- <section v-show="todos.length" class="main">
+    <section v-show="todos.length" class="main">
       <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">
       <label for="toggle-all" />
       <ul class="todo-list">
@@ -19,9 +19,9 @@
           @deleteTodo="handleDel"
         />
       </ul>
-    </section> -->
+    </section>
     <!-- footer -->
-    <!-- <footer v-show="todos.length" class="footer">
+    <footer v-show="todos.length" class="footer">
       <span class="todo-count">
         <strong>{{ remaining }}</strong>
         {{ remaining | pluralize('item') }} left
@@ -31,7 +31,7 @@
           <a :class="{ selected: visibility === key }" @click.prevent="visibility = key">{{ key | capitalize }}</a>
         </li>
       </ul>
-    </footer> -->
+    </footer>
   </section>
 </template>
 
@@ -42,8 +42,9 @@ import {getTodos,delTodo,addTodo, editTodo} from '@/api/todo'
 const STORAGE_KEY = 'todos'
 const filters = {
   all: todos => todos,
-  active: todos => todos.filter(todo => !todo.done),
-  completed: todos => todos.filter(todo => todo.done)
+  // 0表示非活动状态，1表示处于活跃状态
+  active: todos => todos.filter(todo => todo.todoStatus==1),
+  completed: todos => todos.filter(todo => todo.todoStatus==0)
 }
 
 export default {
@@ -59,7 +60,7 @@ export default {
     return {
       visibility: 'all',   
       filters,
-      todos: null
+      todos: []
     }
   },
   /**
@@ -115,7 +116,7 @@ export default {
     },
     handleDel(todo) {
       delTodo(todo).then(response=>{
-        this.todos=response.data.todos
+        this.todos=this.todos.filter(item=>todo.id!=item.id)
       })
     },
     handleEdit({ todo, value }) {

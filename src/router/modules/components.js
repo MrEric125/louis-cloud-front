@@ -5,6 +5,8 @@ import Layout from '@/layout'
 const componentsRouter = {
   path: '/components',
   component: Layout,
+  // hidden: true,
+  // alwaysShow:false,
   redirect: 'noRedirect',
   name: 'ComponentDemo',
   meta: {
